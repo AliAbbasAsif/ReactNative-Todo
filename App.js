@@ -11,12 +11,12 @@ function App() {
 
   return (
     <View>
-     {/* <Todo/> */}
+     <Todo/>
     {/* <Netflixlogin/> */}
     {/* <Login2/> */}
     {/* <Login3/> */}
     {/* <Login4/> */}
-    <Login5/>
+    {/* <Login5/> */}
     </View>
   );
 }

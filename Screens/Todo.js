@@ -8,11 +8,14 @@ import {
   TouchableOpacity,
   Image,
   Alert,
+  ScrollView,
 } from 'react-native';
 
 function Todo() {
   const [list, setlist] = useState([]);
   const [txt, settxt] = useState('');
+  const [currentIndex, setCurrentIndex] = useState();
+  const [isEditing, setIsEditing] = useState(false);
   // const [checked, setchecked] = useState(false);
 
   // const toggleclass = () => {
@@ -21,13 +24,22 @@ function Todo() {
 
   let add = e => {
     setlist([...list, txt]);
+    settxt('');
   };
   let del = id => {
     list.splice(id, 1);
     setlist([...list]);
   };
-  let edit = id => {
-    
+  let edit = index => {
+    settxt(list[index]);
+    setCurrentIndex(index);
+    setIsEditing(true);
+  };
+
+  let save = () => {
+    list[currentIndex] = txt;
+    settxt('');
+    setIsEditing(false);
   };
   return (
     <View>
@@ -57,9 +69,10 @@ function Todo() {
             }}
             placeholder="Enter Todo"
             onChangeText={e => settxt(e)}
+            value={txt}
           />
           <View style={{marginHorizontal: 10, flex: 1}}>
-            <TouchableOpacity onPress={add}>
+            <TouchableOpacity onPress={isEditing ? save : add}>
               <Image
                 source={require('../Images/add.png')}
                 style={{width: '100%', resizeMode: 'contain', marginTop: 10}}
@@ -68,39 +81,41 @@ function Todo() {
           </View>
         </View>
       </View>
-      {list.map((e, i) => (
-        <View key={i} style={style.todos}>
-          <View style={{flexDirection: 'row'}}>
-            <View style={{marginHorizontal: 10, flex: 1}}>
-              {/* <TouchableOpacity >
+      <ScrollView>
+        {list.map((e, i) => (
+          <View key={i} style={style.todos}>
+            <View style={{flexDirection: 'row'}}>
+              <View style={{marginHorizontal: 10, flex: 1}}>
+                {/* <TouchableOpacity >
                 <Image
                   source={require('../Images/check.png')}
                   style={{width: '80%', resizeMode: 'contain'}}
                 />
               </TouchableOpacity> */}
-            </View>
-            <Text style={([style.font], {flex: 8, textAlign: 'auto'})}>
-              {e}
-            </Text>
-            <View style={{marginHorizontal: 10, flex: 1}}>
-              <TouchableOpacity onPress={() => del(i)}>
-                <Image
-                  source={require('../Images/delete.png')}
-                  style={{width: '80%', resizeMode: 'contain'}}
-                />
-              </TouchableOpacity>
-            </View>
-            <View style={{marginHorizontal: 10, flex: 1}}>
-              <TouchableOpacity onPress={() => edit(i)}>
-                <Image
-                  source={require('../Images/edit.png')}
-                  style={{width: '80%', resizeMode: 'contain'}}
-                />
-              </TouchableOpacity>
+              </View>
+              <Text style={([style.font], {flex: 8, textAlign: 'auto'})}>
+                {e}
+              </Text>
+              <View style={{marginHorizontal: 10, flex: 1}}>
+                <TouchableOpacity onPress={() => del(i)}>
+                  <Image
+                    source={require('../Images/delete.png')}
+                    style={{width: '80%', resizeMode: 'contain'}}
+                  />
+                </TouchableOpacity>
+              </View>
+              <View style={{marginHorizontal: 10, flex: 1}}>
+                <TouchableOpacity onPress={() => edit(i)}>
+                  <Image
+                    source={require('../Images/edit.png')}
+                    style={{width: '80%', resizeMode: 'contain'}}
+                  />
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
-        </View>
-      ))}
+        ))}
+      </ScrollView>
     </View>
   );
 }
